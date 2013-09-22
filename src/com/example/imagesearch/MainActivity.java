@@ -21,6 +21,7 @@ import org.apache.http.util.EntityUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
 import android.provider.MediaStore.MediaColumns;
 import android.app.Activity;
 import android.content.ContentValues;
@@ -46,6 +47,7 @@ public class MainActivity extends Activity {
 	protected static final int IMAGE_PICK = 200;
 	private static final int SELECT_PICTURE = 1;
 	private Uri imageUri;
+	private File file;
 	private int buttonOneOrTwo = 1;
     private String selectedImagePath;
     String filemanagerstring;
@@ -142,12 +144,25 @@ public class MainActivity extends Activity {
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			intent.setType("image/*");
 			startActivityForResult(intent, IMAGE_PICK);
+			
 		}
 	
 		
 	};
 				
-			
+			public void OnActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+
+		        if (resultCode == RESULT_OK) {
+		            Uri selectedImageUri = data.getData();
+		           
+
+		            }
+
+		            
+		        }
+
 			
 	private void PostFile(File filename){ 
 			HttpClient httpclient = new DefaultHttpClient();
@@ -173,15 +188,18 @@ public class MainActivity extends Activity {
 			    
 		    } 
 		    }
-	/*
-    private void saveToFile(String message) throws Exception {
+	
+	
+  /*  private void saveToFile(String message) throws Exception {
+    
         String filePath = getFilesDir()+"";
         File file = new File(filePath + "/sdcard/DCIM/100MEDIA/Wardobe");
         FileOutputStream out = new FileOutputStream(file, true);
+        Bitmap bmp = new Bitmap();
         out.write(message.getBytes());
         out.close();
         saveImage(filePath, "/sdcard/DCIM/100MEDIA/Wardobe/image.jpg", bmp);
-        if(entity != null) {
+        if(file != null) {
             saveImage(filePath, "sdcard/DCIM/100MEDIA/Wardrobe/image.jpg", bmp);
         } 
 
@@ -202,6 +220,9 @@ public class MainActivity extends Activity {
         }
     }
 	  */
+	
+	
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
