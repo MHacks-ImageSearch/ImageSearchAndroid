@@ -7,8 +7,6 @@ import android.view.Menu;
 import android.widget.FrameLayout;
 
 public class CameraActivity extends Activity {
-
-	// Still working on this.
 	
     private Camera mCamera;
     private CameraPreview mPreview;
