@@ -1,7 +1,22 @@
 package com.example.imagesearch;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.*;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.util.EntityUtils;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +27,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.service.textservice.SpellCheckerService.Session;
@@ -23,6 +39,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends Activity {
 
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -87,6 +104,7 @@ public class MainActivity extends Activity {
 	//UPDATED!
 	public String getPath(Uri uri) {
 	String[] projection = { MediaColumns.DATA };
+	@SuppressWarnings("deprecation")
 	Cursor cursor = managedQuery(uri, projection, null, null, null);
 	column_index = cursor
 	        .getColumnIndexOrThrow(MediaColumns.DATA);
@@ -124,9 +142,66 @@ public class MainActivity extends Activity {
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			intent.setType("image/*");
 			startActivityForResult(intent, IMAGE_PICK);
-			
-	    }
+		}
+	
+		
 	};
+				
+			
+			
+	private void PostFile(File filename){ 
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://www.tobedetermined.com/");
+
+		    
+		    try {
+
+		    MultipartEntity mpEntity = new MultipartEntity();
+		    ContentBody cbFile = new FileBody(filename, "image/jpeg");
+		    mpEntity.addPart("userfile", cbFile);
+
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+
+				if (entity != null) {
+				    InputStream instream = entity.getContent();
+				        instream.close();
+				}
+		    }
+			catch(Exception e) {
+				
+			    
+		    } 
+		    }
+	/*
+    private void saveToFile(String message) throws Exception {
+        String filePath = getFilesDir()+"";
+        File file = new File(filePath + "/sdcard/DCIM/100MEDIA/Wardobe");
+        FileOutputStream out = new FileOutputStream(file, true);
+        out.write(message.getBytes());
+        out.close();
+        saveImage(filePath, "/sdcard/DCIM/100MEDIA/Wardobe/image.jpg", bmp);
+        if(entity != null) {
+            saveImage(filePath, "sdcard/DCIM/100MEDIA/Wardrobe/image.jpg", bmp);
+        } 
+
+    }
+    public void saveImage(String path, String dir, Bitmap image) {
+        try{
+            FileOutputStream fos = new FileOutputStream(path + dir);
+            BufferedOutputStream stream = new BufferedOutputStream(fos);
+            bmp.compress(CompressFormat.JPEG, 50, stream);
+            stream.flush();
+            stream.close(); 
+        }
+        catch(FileNotFoundException e) { 
+            e.printStackTrace();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+	  */
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
