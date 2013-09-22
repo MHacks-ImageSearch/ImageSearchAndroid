@@ -22,6 +22,7 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+	protected static final int IMAGE_PICK = 200;
 	private Uri imageUri;
 	
 	@Override
@@ -34,6 +35,7 @@ public class MainActivity extends Activity {
 		final Button gallery = (Button) findViewById(R.id.button2);
 		
 		camera.setOnClickListener(cameraListener);
+		gallery.setOnClickListener(galleryListener);
 	}
 	
 	@Override
@@ -68,7 +70,13 @@ public class MainActivity extends Activity {
 	// Gallery Button Click
 	private OnClickListener galleryListener = new OnClickListener() {
 		public void onClick(View v) {
-			// TO-DO
+			
+			ContentValues values = new ContentValues();
+			imageUri = getContentResolver().insert(
+			        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent.setType("image/*");
+			startActivityForResult(intent, IMAGE_PICK);
 	    }
 	};
 	
